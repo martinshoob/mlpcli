@@ -29,6 +29,7 @@ play_episode() {
     season_number="$1"
     episode_number="$2"
     quality="$3"
+    clear
     echo "Streaming season $season_number episode $episode_number of My Little Pony: Friendship is Magic in $quality quality"
     EPISODE_URL="https://static.heartshine.gay/g4-fim/s$(printf "%02d" "$season_number")e$(printf "%02d" "$episode_number")-${quality}.mp4"
     # Play the episode using mpv
@@ -40,6 +41,7 @@ list_season_episodes() {
     season_number="$1"
     case $season_number in
         1|2|3|4|5|6|7|8|9)
+            clear
             echo "${GREEN}Episodes for Season $season_number:${NC}"
             episode_count=26
             if (( season_number == 3 )); then
@@ -50,6 +52,7 @@ list_season_episodes() {
             done
             ;;
         *)
+            clear
             echo "${RED}Invalid season number.${NC}"
             ;;
     esac
@@ -57,6 +60,7 @@ list_season_episodes() {
 
 # Function to list available seasons
 list_seasons() {
+    clear
     echo "${YELLOW}Available seasons:${NC}"
     echo "1. ${BLUE}Season 1${NC}"
     echo "2. ${BLUE}Season 2${NC}"
@@ -93,6 +97,7 @@ play_random_episode() {
 
 # Function to change streaming quality
 change_quality() {
+    clear
     echo "${YELLOW}Select streaming quality:${NC}"
     echo "1. ${BLUE}480p${NC}"
     echo "2. ${BLUE}720p${NC}"
@@ -102,12 +107,15 @@ change_quality() {
     case $choice in
         1)
             set_streaming_quality "480p"
+            echo "${GREEN}480p selected.${NC}"
             ;;
         2)
             set_streaming_quality "720p"
+            echo "${GREEN}720p selected.${NC}"
             ;;
         3)
             set_streaming_quality "1080p"
+            echo "${GREEN}1080p selected.${NC}"
             ;;
         *)
             echo "${RED}Invalid option. Default quality will be used.${NC}"
@@ -117,6 +125,7 @@ change_quality() {
 
 # Interactive menu
 while true; do
+    clear
     echo "${BLUE}Select an option:${NC}"
     echo "1. ${YELLOW}Select episode${NC}"
     echo "2. ${YELLOW}Play random episode from a specific season${NC}"
@@ -160,5 +169,5 @@ while true; do
             echo "${RED}Invalid option. Please select again.${NC}"
             ;;
     esac
+    read -p "Press Enter to continue..."
 done
-
