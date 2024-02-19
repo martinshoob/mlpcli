@@ -20,7 +20,7 @@ get_streaming_quality() {
     if [[ -f "$CONFIG_FILE" ]]; then
         cat "$CONFIG_FILE"
     else
-        echo "default"
+        echo "1080p"
     fi
 }
 
@@ -67,7 +67,6 @@ list_seasons() {
     echo "7. ${BLUE}Season 7${NC}"
     echo "8. ${BLUE}Season 8${NC}"
     echo "9. ${BLUE}Season 9${NC}"
-    # Add more seasons here if needed
 }
 
 # Function to play a random episode from a specific season
