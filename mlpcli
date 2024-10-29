@@ -12,162 +12,156 @@ CONFIG_FILE="$HOME/.mlp_streaming_config"
 
 # Function to set streaming quality
 set_streaming_quality() {
-    echo "$1" > "$CONFIG_FILE"
+  echo "$1" >"$CONFIG_FILE"
 }
 
 # Function to get streaming quality
 get_streaming_quality() {
-    if [[ -f "$CONFIG_FILE" ]]; then
-        cat "$CONFIG_FILE"
-    else
-        echo "1080p"
-    fi
+  if [[ -f "$CONFIG_FILE" ]]; then
+    cat "$CONFIG_FILE"
+  else
+    echo "1080p"
+  fi
 }
 
 # Function to play an episode
 play_episode() {
-    season_number="$1"
-    episode_number="$2"
-    quality="$3"
-    clear
-    echo "Streaming season $season_number episode $episode_number of My Little Pony: Friendship is Magic in $quality quality"
-    EPISODE_URL="https://static.heartshine.gay/g4-fim/s$(printf "%02d" "$season_number")e$(printf "%02d" "$episode_number")-${quality}.mp4"
-    # Play the episode using mpv
-    mpv "$EPISODE_URL" &>/dev/null
+  season_number="$1"
+  episode_number="$2"
+  quality="$3"
+  clear
+  echo "Streaming season $season_number episode $episode_number of My Little Pony: Friendship is Magic in $quality quality"
+  EPISODE_URL="https://static.heartshine.gay/g4-fim/s$(printf "%02d" "$season_number")e$(printf "%02d" "$episode_number")-${quality}.mp4"
+  # Play the episode using mpv
+  mpv "$EPISODE_URL" &>/dev/null
 }
 
 # Function to list available episodes for a specific season
 list_season_episodes() {
-    season_number="$1"
-    case $season_number in
-        1|2|3|4|5|6|7|8|9)
-            clear
-            echo "${GREEN}Episodes for Season $season_number:${NC}"
-            episode_count=26
-            if (( season_number == 3 )); then
-                episode_count=13
-            fi
-            for (( i=1; i<=episode_count; i++ )); do
-                printf "%2d. ${BLUE}Episode %02d${NC}\n" "$i" "$i"
-            done
-            ;;
-        *)
-            clear
-            echo "${RED}Invalid season number.${NC}"
-            ;;
-    esac
+  season_number="$1"
+  case $season_number in
+  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9)
+    clear
+    echo "${GREEN}Episodes for Season $season_number:${NC}"
+    episode_count=26
+    if ((season_number == 3)); then
+      episode_count=13
+    fi
+    for ((i = 1; i <= episode_count; i++)); do
+      printf "%2d. ${BLUE}Episode %02d${NC}\n" "$i" "$i"
+    done
+    ;;
+  *)
+    clear
+    echo "${RED}Invalid season number.${NC}"
+    ;;
+  esac
 }
 
 # Function to list available seasons
 list_seasons() {
-    clear
-    echo "${YELLOW}Available seasons:${NC}"
-    echo "1. ${BLUE}Season 1${NC}"
-    echo "2. ${BLUE}Season 2${NC}"
-    echo "3. ${BLUE}Season 3${NC}"
-    echo "4. ${BLUE}Season 4${NC}"
-    echo "5. ${BLUE}Season 5${NC}"
-    echo "6. ${BLUE}Season 6${NC}"
-    echo "7. ${BLUE}Season 7${NC}"
-    echo "8. ${BLUE}Season 8${NC}"
-    echo "9. ${BLUE}Season 9${NC}"
+  clear
+  echo "${YELLOW}Available seasons:${NC}"
+  for i in {1..9}; do
+    echo "$i. ${BLUE}Season $i${NC}"
+  done
 }
 
 # Function to play a random episode from a specific season
 play_random_episode_from_season() {
-    season_number="$1"
-    episode_number=$((RANDOM % 26 + 1))
-    if (( season_number == 3 )); then
-        episode_number=$((RANDOM % 13 + 1))
-    fi
-    quality=$(get_streaming_quality)
-    play_episode "$season_number" "$episode_number" "$quality"
+  season_number="$1"
+  episode_number=$((RANDOM % 26 + 1))
+  if ((season_number == 3)); then
+    episode_number=$((RANDOM % 13 + 1))
+  fi
+  quality=$(get_streaming_quality)
+  play_episode "$season_number" "$episode_number" "$quality"
 }
 
 # Function to play a completely random episode
 play_random_episode() {
-    season_number=$((RANDOM % 9 + 1))
-    episode_number=$((RANDOM % 26 + 1))
-    if (( season_number == 3 )); then
-        episode_number=$((RANDOM % 13 + 1))
-    fi
-    quality=$(get_streaming_quality)
-    play_episode "$season_number" "$episode_number" "$quality"
+  season_number=$((RANDOM % 9 + 1))
+  episode_number=$((RANDOM % 26 + 1))
+  if ((season_number == 3)); then
+    episode_number=$((RANDOM % 13 + 1))
+  fi
+  quality=$(get_streaming_quality)
+  play_episode "$season_number" "$episode_number" "$quality"
 }
 
 # Function to change streaming quality
 change_quality() {
-    clear
-    echo "${YELLOW}Select streaming quality:${NC}"
-    echo "1. ${BLUE}480p${NC}"
-    echo "2. ${BLUE}720p${NC}"
-    echo "3. ${BLUE}1080p${NC}"
-    read -p "Enter your choice: " choice
+  clear
+  echo "${YELLOW}Select streaming quality:${NC}"
+  echo "1. ${BLUE}480p${NC}"
+  echo "2. ${BLUE}720p${NC}"
+  echo "3. ${BLUE}1080p${NC}"
+  read -p "Enter your choice: " choice
 
-    case $choice in
-        1)
-            set_streaming_quality "480p"
-            echo "${GREEN}480p selected.${NC}"
-            ;;
-        2)
-            set_streaming_quality "720p"
-            echo "${GREEN}720p selected.${NC}"
-            ;;
-        3)
-            set_streaming_quality "1080p"
-            echo "${GREEN}1080p selected.${NC}"
-            ;;
-        *)
-            echo "${RED}Invalid option. Default quality will be used.${NC}"
-            ;;
-    esac
+  case $choice in
+  1)
+    set_streaming_quality "480p"
+    echo "${GREEN}480p selected.${NC}"
+    ;;
+  2)
+    set_streaming_quality "720p"
+    echo "${GREEN}720p selected.${NC}"
+    ;;
+  3)
+    set_streaming_quality "1080p"
+    echo "${GREEN}1080p selected.${NC}"
+    ;;
+  *)
+    echo "${RED}Invalid option. Default quality will be used.${NC}"
+    ;;
+  esac
 }
 
 # Interactive menu
 while true; do
-    clear
-    echo "${BLUE}Select an option:${NC}"
-    echo "1. ${YELLOW}Select episode${NC}"
-    echo "2. ${YELLOW}Play random episode from a specific season${NC}"
-    echo "3. ${YELLOW}Play completely random episode${NC}"
-    echo "4. ${YELLOW}Change streaming quality${NC}"
-    echo "5. ${RED}Exit${NC}"
-    read -p "Enter your choice: " choice
+  clear
+  echo "${BLUE}Select an option:${NC}"
+  echo "1. ${YELLOW}Select episode${NC}"
+  echo "2. ${YELLOW}Play random episode from a specific season${NC}"
+  echo "3. ${YELLOW}Play completely random episode${NC}"
+  echo "4. ${YELLOW}Change streaming quality${NC}"
+  echo "5. ${RED}Exit${NC}"
+  read -p "Enter your choice: " choice
 
-    case $choice in
-        1)
-            list_seasons
-            read -p "Enter season number: " season_number
-            list_season_episodes "$season_number"
-            read -p "Enter episode number: " episode_number
-            if (( episode_number >= 1 && episode_number <= 26 )); then
-                quality=$(get_streaming_quality)
-                play_episode "$season_number" "$episode_number" "$quality"
-            elif (( season_number == 3 && episode_number >= 1 && episode_number <= 13 )); then
-                quality=$(get_streaming_quality)
-                play_episode "$season_number" "$episode_number" "$quality"
-            else
-                echo "${RED}Invalid episode number for season $season_number.${NC}"
-            fi
-            ;;
-        2)
-            list_seasons
-            read -p "Enter season number: " season_number
-            play_random_episode_from_season "$season_number"
-            ;;
-        3)
-            play_random_episode
-            ;;
-        4)
-            change_quality
-            ;;
-        5)
-            echo "${GREEN}Exiting.${NC}"
-            exit 0
-            ;;
-        *)
-            echo "${RED}Invalid option. Please select again.${NC}"
-            ;;
-    esac
-    read -p "Press Enter to continue..."
+  case $choice in
+  1)
+    list_seasons
+    read -p "Enter season number: " season_number
+    list_season_episodes "$season_number"
+    read -p "Enter episode number: " episode_number
+    if ((episode_number >= 1 && episode_number <= 26)); then
+      quality=$(get_streaming_quality)
+      play_episode "$season_number" "$episode_number" "$quality"
+    elif ((season_number == 3 && episode_number >= 1 && episode_number <= 13)); then
+      quality=$(get_streaming_quality)
+      play_episode "$season_number" "$episode_number" "$quality"
+    else
+      echo "${RED}Invalid episode number for season $season_number.${NC}"
+    fi
+    ;;
+  2)
+    list_seasons
+    read -p "Enter season number: " season_number
+    play_random_episode_from_season "$season_number"
+    ;;
+  3)
+    play_random_episode
+    ;;
+  4)
+    change_quality
+    ;;
+  5)
+    echo "${GREEN}Exiting.${NC}"
+    exit 0
+    ;;
+  *)
+    echo "${RED}Invalid option. Please select again.${NC}"
+    ;;
+  esac
+  read -p "Press Enter to continue..."
 done
